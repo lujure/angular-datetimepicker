@@ -1,7 +1,7 @@
 /*!
  * Pikaday
  *
- * Copyright Â© 2013 David Bushell | BSD & MIT license | https://github.com/dbushell/Pikaday
+ * Copyright © 2013 David Bushell | BSD & MIT license | https://github.com/dbushell/Pikaday
  */
 /**
 `luke-edit` denotes the edits to the original
@@ -211,7 +211,9 @@
             nextMonth     : 'Next Month',
             months        : ['January','February','March','April','May','June','July','August','September','October','November','December'],
             weekdays      : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-            weekdaysShort : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+    		// Amr Hilal
+            //weekdaysShort : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+    		weekdaysShort : ['S','M','T','W','Th','F','S']
         },
 
         // callback function
@@ -327,6 +329,7 @@
 
     renderTimePicker = function(num_options, selected_val, select_class, display_func) {
         var to_return = '<td><select class="pika-select '+select_class+'">';
+        
         for (var i=0; i<num_options; i++) {
             to_return += '<option value="'+i+'" '+(i==selected_val ? 'selected' : '')+'>'+display_func(i)+'</option>'
         }
@@ -334,7 +337,7 @@
         return to_return;
     },
 
-    renderTime = function(hh, mm, ss, use24hour, showSeconds)
+    /*renderTime = function(hh, mm, ss, use24hour, showSeconds)
     {
         var to_return = '<table cellpadding="0" cellspacing="0" class="pika-time"><tbody><tr>' +
             renderTimePicker(24, hh, 'pika-select-hour', function(i) {
@@ -359,10 +362,63 @@
                 renderTimePicker(60, ss, 'pika-select-second', function(i) { if (i < 10) return "0" + i; return i });
         }
         return to_return + '</tr></tbody></table>';
+    },*/
+    
+	// Amr Hilal
+    renderTime = function(hh, mm, noon, ss, use24hour, showSeconds)
+    {
+    	var num_options = use24hour ? 24 : 12;
+    	var hh_option = use24hour ? hh : hh % 12;
+    	var to_return = '<table cellpadding="0" cellspacing="0" class="pika-time"><tbody><tr>' +
+    	renderTimePicker(num_options, hh_option, 'pika-select-hour', function(i) {
+    		return i;
+    	}) + //'<td></td>' +
+    	renderTimePicker(60, mm, 'pika-select-minute', function(i) {
+    		if (i < 10) {
+    			return "0" + i;
+    		} else {
+    			return "" + i; 
+    		}
+    	});
+    	
+    	if (!use24hour) {
+    		to_return += //'<td></td>' +
+        	renderTimePicker(2, noon, 'pika-select-noon', function(i) {
+        		if (i == 0) {
+        			return "AM";
+        		} else {
+        			return "PM"; 
+        		}
+        	});
+    	}
+    	
+    	if (showSeconds) {
+    		to_return += '<td>:</td>' +
+    		renderTimePicker(60, ss, 'pika-select-second', function(i) {
+    			if (i < 10) {
+    				return "0" + i; 
+    			} else {
+    				return i;
+    			}
+    		});
+    	}
+    	return to_return + '</tr></tbody></table>' + renderTimeZone() + renderAcceptCancelButtons();
     },
 
-
-
+    renderTimeZone = function()
+    {
+    	var timezone = jstz.determine(); 
+    	return '<div class="timezone">' + timezone.name() + '</div>';
+    },
+    
+    renderAcceptCancelButtons = function()
+    {
+    	//return '<div class="is-selected scheduleAction"><button class="pika-button schedule" type="button">Schedule</button></div>';
+    	
+    	return '<div class="scheduleActions"><div class="action"><button class="pika-button cancel" type="button">Canel</button></div>' +
+    	'<div class="action"><button class="pika-button schedule" type="button">Schedule</button></div></div>';
+    },
+    //----------------------
     /**
      * Pikaday constructor
      */
@@ -382,14 +438,45 @@
                 return;
             }
 
+            // Amr Hilal
+            if (hasClass(target, 'schedule')) {
+                self.setDate(new Date(self._y, self._m, self._day, self._hh, self._mm, self._ss));
+                if (opts.bound) {
+                    sto(function() {
+                        self.hide();
+                    }, 100);
+                }
+                return;
+            }
+            
+            if (hasClass(target, 'cancel')) {
+                if (opts.bound) {
+                    sto(function() {
+                        self.hide();
+                    }, 100);
+                }
+                return;
+            }
+
+            //-------
             if (!hasClass(target, 'is-disabled')) {
                 if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty')) {
-                    self.setDate(new Date(self._y, self._m, parseInt(target.innerHTML, 10), self._hh, self._mm, self._ss));
+                	// Amr Hilal
+                    /*self.setDate(new Date(self._y, self._m, parseInt(target.innerHTML, 10), self._hh, self._mm, self._ss));
                     if (opts.bound) {
                         sto(function() {
                             self.hide();
                         }, 100);
-                    }
+                    }*/
+                	var selectedDay = document.getElementsByClassName('is-selected');
+                	if (selectedDay.length == 1) {
+                		if (selectedDay[0].nodeName == "TD") {
+                			selectedDay[0].className = selectedDay[0].className.replace("is-selected", "");
+                		}
+                	}
+                	target.parentNode.className = target.parentNode.className + ' is-selected';
+                    self._day = parseInt(target.innerHTML, 10);
+                    //-------------
                     return;
                 }
                 else if (hasClass(target, 'pika-prev')) {
@@ -424,10 +511,25 @@
             else if (hasClass(target, 'pika-select-year')) {
                 self.gotoYear(target.value);
             }
+            // Amr Hilal
             else if (hasClass(target, 'pika-select-hour')) {
-                self._hh = target.value;
+            	if (!self._o.use24hour) {
+            		self._hh = (parseInt(target.value) % 12) + (parseInt(self._noon) * 12);
+            	} else {
+            		self._hh = target.value;
+            	}
                 self.setTime(self._hh, self._mm, self._ss);
             }
+            else if (hasClass(target, 'pika-select-noon')) {
+            	self._noon = target.value;
+            	if (!self._o.use24hour) {
+            		self._hh = (parseInt(self._hh) % 12) + (parseInt(self._noon) * 12);
+            	} else {
+            		self._hh = target.value;
+            	}
+            	self.setTime(self._hh, self._mm, self._ss);
+            }
+            //---------------
             else if (hasClass(target, 'pika-select-minute')) {
                 self._mm = target.value;
                 self.setTime(self._hh, self._mm, self._ss);
@@ -544,7 +646,8 @@
             self.el.className += ' is-bound';
             addEvent(opts.trigger, 'click', self._onInputClick);
             addEvent(opts.trigger, 'focus', self._onInputFocus);
-            addEvent(opts.trigger, 'blur', self._onInputBlur);
+            // Amr Hilal
+            //addEvent(opts.trigger, 'blur', self._onInputBlur);
         } else {
             this.show();
         }
@@ -662,7 +765,9 @@
         setTime: function(hours, minutes, seconds) {
             if (this._d) {
                 this._d.setHours(this._hh, this._mm, this._ss);
-                this.setDate(this._d);
+                // Amr Hilal
+                //this.setDate(this._d);
+                //-------
             }
         },
 		
@@ -717,7 +822,8 @@
             this.gotoDate(this._d);
 
             if (this._o.field) {
-                this._o.field.value = this.toString();
+            	// Amr Hilal
+                //this._o.field.value = this.toString();
                 fireEvent(this._o.field, 'change', { firedBy: this });
             }
             if (!preventOnSelect && typeof this._o.onSelect === 'function') {
@@ -735,6 +841,10 @@
             }
             this._y = date.getFullYear();
             this._m = date.getMonth();
+            // Amr Hilal
+            this._day = date.getDate();
+            this._noon = (Math.floor(date.getHours() / 12));
+            //----------
             this._hh = date.getHours();
             this._mm = date.getMinutes();
             this._ss = date.getSeconds();
@@ -831,7 +941,7 @@
 
             this.el.innerHTML = renderTitle(this) + this.render(this._y, this._m);
             if (opts.showTime) {
-                this.el.innerHTML += renderTime(this._hh, this._mm, this._ss, this._o.use24hour, this._o.showSeconds);
+                this.el.innerHTML += renderTime(this._hh, this._mm, this._noon, this._ss, this._o.use24hour, this._o.showSeconds);
             }
 
             if (opts.bound) {
@@ -853,7 +963,8 @@
 
         adjustPosition: function()
         {
-            var field = this._o.trigger, pEl = field,
+        	// Amr Hilal
+        	/* var field = this._o.trigger, pEl = field,
             width = this.el.offsetWidth, height = this.el.offsetHeight,
             viewportWidth = window.innerWidth || document.documentElement.clientWidth,
             viewportHeight = window.innerHeight || document.documentElement.clientHeight,
@@ -880,6 +991,8 @@
                 top = field.offsetTop - height;
             }
             this.el.style.cssText = 'position:absolute;left:' + left + 'px;top:' + top + 'px;';
+            */
+            this.el.style.cssText = 'position:absolute;left:50%;top:50%;';
         },
 
         /**
