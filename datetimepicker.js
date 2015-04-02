@@ -217,7 +217,7 @@ angular.module('jackrabbitsgroup.angular-datetimepicker', []).directive('jrgDate
 			//extend defaults
 			var defaults ={
 				opts: {
-					formatModel: 'YYYY-MM-DD HH:mm:ssZ',
+					formatModel: 'YYYY-MM-DDTHH:mm:ssZ',
 					formatDisplay: 'YYYY-MM-DD HH:mm:ssZ',
 					revertOnInvalid: false
 				}
@@ -285,6 +285,13 @@ angular.module('jackrabbitsgroup.angular-datetimepicker', []).directive('jrgDate
 				});
 			}
 			else {		//pikaday
+				// Amr Hilal
+				var today = new Date;
+				var convertTo2Digit = function (n) { return n < 10 ? '0'+n : n;}
+				var minDate = new Date(today.getFullYear() + '-' + convertTo2Digit(today.getMonth() + 1) + '-' + convertTo2Digit(today.getDate()));
+				var maxDate = new Date();
+				maxDate.setFullYear(minDate.getFullYear() + 1);
+				//---------
 				var defaultPikadayOpts ={
 					field: document.getElementById(attrs.id),
 					onSelect: function() {
@@ -299,9 +306,14 @@ angular.module('jackrabbitsgroup.angular-datetimepicker', []).directive('jrgDate
 					// defaultDate: new Date(scope.ngModel),
 					// setDefaultDate: true,
 					
-					minDate: new Date('2000-01-01'),
-					maxDate: new Date('2020-12-31'),
-					yearRange: [2000, 2020]
+					// Amr Hilal
+					//minDate: new Date('2000-01-01'),
+					//maxDate: new Date('2020-12-31'),
+					//yearRange: [2000, 2020]
+
+					minDate: minDate,
+					maxDate: maxDate,
+					yearRange: [minDate.getFullYear(), maxDate.getFullYear()]
 					
 					// showTime: true
 				};
