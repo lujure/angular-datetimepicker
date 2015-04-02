@@ -1,42 +1,41 @@
 {
-	"name": "angular-datetimepicker",
-	"version": "1.0.6-p1",
-	"authors": [
-		"Luke Madera <luke.madera@gmail.com>",
-		"Amr Hilal <ahilal@heyo.com>"
-	],
-	"main": [
-		"pikaday/pikaday-edit.js",
-		"pikaday/pikaday.css",
-		"datetimepicker.js",
-		"datetimepicker.css"
-	],
-	"description": "AngularJS datetime picker - calendar for date (using Pikaday) and timepicker",
-	"keywords": [
-		"angular",
-		"AngularJS",
-		"datetimepicker",
-		"date",
-		"time",
-		"datepicker",
-		"timepicker",
-		"angular-datetimepicker",
-		"angular-datetime"
-	],
-	"license": "MIT",
-	"ignore": [
-		"**/.*",
-		"node_modules",
-		"bower_components",
-		"test",
-		"tests"
-	],
-	"dependencies": {
-		"angular":"~1.2.2",
-		"angular-animate":"~1.2.2",
-		"angular-sanitize":"~1.2.2",
-		"angular-touch":"~1.2.2"
-	},
-	"devDependencies": {
-	}
+  "name": "angular-datetimepicker",
+  "version": "1.0.6-p2",
+  "authors": [
+    "Luke Madera <luke.madera@gmail.com>",
+    "Amr Hilal <ahilal@heyo.com>"
+  ],
+  "main": [
+    "pikaday/pikaday-edit.js",
+    "pikaday/pikaday.css",
+    "datetimepicker.js",
+    "datetimepicker.css"
+  ],
+  "description": "AngularJS datetime picker - calendar for date (using Pikaday) and timepicker",
+  "keywords": [
+    "angular",
+    "AngularJS",
+    "datetimepicker",
+    "date",
+    "time",
+    "datepicker",
+    "timepicker",
+    "angular-datetimepicker",
+    "angular-datetime"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.2",
+    "angular-animate": "~1.2.2",
+    "angular-sanitize": "~1.2.2",
+    "angular-touch": "~1.2.2"
+  },
+  "devDependencies": {}
 }
