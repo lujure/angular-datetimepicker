@@ -2,7 +2,14 @@
 	"name": "angular-datetimepicker",
 	"version": "1.0.6-p1",
 	"authors": [
-		"Luke Madera <luke.madera@gmail.com>"
+		"Luke Madera <luke.madera@gmail.com>",
+		"Amr Hilal <ahilal@heyo.com>"
+	],
+	"main": [
+		"pikaday/pikaday-edit.js",
+		"pikaday/pikaday.css",
+		"datetimepicker.js",
+		"datetimepicker.css"
 	],
 	"description": "AngularJS datetime picker - calendar for date (using Pikaday) and timepicker",
 	"keywords": [
