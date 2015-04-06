@@ -371,7 +371,7 @@
     	var hh_option = use24hour ? hh : hh % 12;
     	var to_return = '<table cellpadding="0" cellspacing="0" class="pika-time"><tbody><tr>' +
     	renderTimePicker(num_options, hh_option, 'pika-select-hour', function(i) {
-    		return i;
+    		return (i % 12) ? (i % 12) : 12;
     	}) + //'<td></td>' +
     	renderTimePicker(60, mm, 'pika-select-minute', function(i) {
     		if (i < 10) {
