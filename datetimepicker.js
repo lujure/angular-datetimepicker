@@ -328,7 +328,11 @@ angular.module('jackrabbitsgroup.angular-datetimepicker', []).directive('jrgDate
 				//set initial value
 				if(scope.ngModel) {
 					setModelVal(scope.ngModel);
-				}				
+				}
+				
+				scope.$on('$destroy', function() {
+			        picker.destroy();
+			    });
 			}
 			
 			triggerSkipSelect =false;		//NOW can validate, etc. as usual
