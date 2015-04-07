@@ -469,7 +469,6 @@
                         }, 100);
                     }*/
                 	var selectedDay = document.getElementsByClassName('is-selected');
-                	//if (selectedDay.length >= 1) {
                 	for (var i = 0 ; i < selectedDay.length ; i++) {
                 		if (selectedDay[0].nodeName == "TD") {
                 			selectedDay[0].className = selectedDay[0].className.replace("is-selected", "");
