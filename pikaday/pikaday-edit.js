@@ -415,7 +415,7 @@
     {
     	//return '<div class="is-selected scheduleAction"><button class="pika-button schedule" type="button">Schedule</button></div>';
     	
-    	return '<div class="scheduleActions"><div class="action"><button class="pika-button cancel" type="button">Canel</button></div>' +
+    	return '<div class="scheduleActions"><div class="action"><button class="pika-button cancel" type="button">Cancel</button></div>' +
     	'<div class="action"><button class="pika-button schedule" type="button">Schedule</button></div></div>';
     },
     //----------------------
@@ -469,7 +469,7 @@
                         }, 100);
                     }*/
                 	var selectedDay = document.getElementsByClassName('is-selected');
-                	if (selectedDay.length == 1) {
+                	for (var i = 0 ; i < selectedDay.length ; i++) {
                 		if (selectedDay[0].nodeName == "TD") {
                 			selectedDay[0].className = selectedDay[0].className.replace("is-selected", "");
                 		}
