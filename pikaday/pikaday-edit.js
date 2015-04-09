@@ -992,7 +992,7 @@
             }
             this.el.style.cssText = 'position:absolute;left:' + left + 'px;top:' + top + 'px;';
             */
-            this.el.style.cssText = 'position:absolute;left:50%;top:50%;';
+            this.el.style.cssText = 'position:absolute;left:50%;top:50%;margin-left:-120px;margin-top:-165px;';
         },
 
         /**
